@@ -27,6 +27,14 @@ def validate(text):
     bad = [c for c in text if ord(c) < 0x20 or c == "\x7f"]
     if bad:
         return "entry contains control characters: %r" % bad
+    # The brief requires a REAL fortune cookie message for an engineer:
+    # a fortune (a prophecy about the reader) and an engineer cue.
+    lowered = text.lower()
+    if not any(op in lowered for op in ("you will", "you are", "your ", "soon", "beware")):
+        return "entry must read as a fortune (a prophecy about the reader)"
+    engineer_cues = ("code", "debug", "deploy", "merge", "bug", "ai", "engineer", "server", "test")
+    if not any(cue in lowered for cue in engineer_cues):
+        return "entry must carry an engineer cue"
     return None
 
 
