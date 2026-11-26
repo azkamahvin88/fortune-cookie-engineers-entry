@@ -35,6 +35,16 @@ def validate(text):
     engineer_cues = ("code", "debug", "deploy", "merge", "bug", "ai", "engineer", "server", "test")
     if not any(cue in lowered for cue in engineer_cues):
         return "entry must carry an engineer cue"
+    # The brief weighs freshness: a stock joke from a mug or a conference
+    # slide loses to a line nobody has seen before. Reject the stock lines
+    # the field is saturated with, so only a fresh line can pass.
+    stock_jokes = (
+        "it works on my machine", "have you tried turning it off",
+        "friday deploy", "merge conflict", "404", "works on my machine",
+        "there are only 10 kinds of people", "it is not a bug",
+    )
+    if any(stock in lowered for stock in stock_jokes):
+        return "entry is a stock joke, not a fresh line"
     return None
 
 
